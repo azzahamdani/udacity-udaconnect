@@ -14,6 +14,8 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
 
+  config.vm.synced_folder ".",  "/project"
+
   config.vm.define "master" do |master|
     master.vm.box = default_box
     master.vm.hostname = "master"
@@ -23,7 +25,7 @@ Vagrant.configure("2") do |config|
     master.vm.network "forwarded_port", guest: 6443, host: 6443 # API Access
     for p in 30000..30100 # expose NodePort IP's
       master.vm.network "forwarded_port", guest: p, host: p, protocol: "tcp"
-      end
+    end
     master.vm.provider "virtualbox" do |v|
       v.memory = "3072"
       v.name = "master"
