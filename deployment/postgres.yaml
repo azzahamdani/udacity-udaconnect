@@ -35,7 +35,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  type: NodePort
+  type: LoadBalancer # NodePort
   selector:
     app: postgres
   ports:
