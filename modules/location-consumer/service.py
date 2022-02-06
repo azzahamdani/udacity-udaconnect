@@ -45,7 +45,7 @@ locations_kafka_topic = app.topic('location-events', value_type=LocationEvent)
 @app.agent(locations_kafka_topic)
 async def process(locationevents):
     async for locationevent in locationevents:
-        app.logger.info(struct_message('Location Received from locations-event stream', 
+        app.logger.info(struct_message('Location received from locations-event stream', 
         personid=locationevent.person_id, 
         latitude=locationevent.latitude, 
         longitude=locationevent.longitude, 
@@ -66,7 +66,7 @@ def createlocation(locationevent):
             try:
                 session.add(new_location)
                 session.commit()
-                app.logger.info(struct_message('Location Persisted in database', 
+                app.logger.info(struct_message('Location persisted in LocationDB', 
                 personid=locationevent.person_id, 
                 latitude=locationevent.latitude, 
                 longitude=locationevent.longitude, 
@@ -77,7 +77,7 @@ def createlocation(locationevent):
             finally:
                 session.close()
         else: 
-            app.logger.info(struct_message('Person in LocationEvent not found', 
+            app.logger.error(struct_message('Person for LocationEvent person ID not found', 
             personid=locationevent.person_id))
         
 

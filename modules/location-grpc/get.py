@@ -11,5 +11,10 @@ print("Sending sample payload...")
 channel = grpc.insecure_channel("localhost:5005")
 stub = location_pb2_grpc.LocationServiceStub(channel)
 
-response = stub.Get(location_pb2.LocationIdMessage(id=68))
-print(response)
+
+
+try: 
+    response = stub.Get(location_pb2.LocationIdMessage(id=100))
+    print(response)
+except:
+    print('location not found in database')

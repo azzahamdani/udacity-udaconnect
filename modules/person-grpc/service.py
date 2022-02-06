@@ -2,6 +2,8 @@ import time
 import sys
 import json
 from concurrent import futures
+import traceback
+sys.tracebacklimit = 0
 
 import logging
 
@@ -12,24 +14,29 @@ import person_pb2_grpc
 # import database from session 
 from models import session, Person
 
+# structured data for logs 
+class StructuredMessage(object):
+    def __init__(self, message, **kwargs):
+        self.message = message
+        self.kwargs = kwargs
+
+    def __str__(self):
+        return '%s >>> %s' % (self.message, json.dumps(self.kwargs))
+
+struct_message = StructuredMessage
 
 # setting the logger 
 log = logging.getLogger()
-log.setLevel(logging.INFO)
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-log.addHandler(ch)
-
 
 class PersonServicer(person_pb2_grpc.PersonServiceServicer):
     
     def Get(self, request, context):
 
+        log.info(struct_message('Person ID in Request', personid=request.id))
+
         person = session.query(Person).get(request.id)
         if person is None:
-            log.info("None")
+            log.error(struct_message('Person for Person ID not found', personid=request.id))
             result = person_pb2.PersonMessage(
             id=-1,
             first_name="",
@@ -37,7 +44,12 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
             company_name="",
         )
         else :
-            log.info("Received Person" + str(person) )
+            log.info( struct_message('Person received from PersonDB', 
+            personid=person.id,
+            firstname=person.first_name,
+            lastname=person.last_name,
+            companyname=person.company_name) )
+
             result = person_pb2.PersonMessage(
                 id=person.id,
                 first_name=person.first_name,
@@ -49,7 +61,7 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
     def GetAll(self, request, context):
 
         persons = session.query(Person).all()
-        log.info("Received a message!: " + str(persons))
+        # TODO: log received message from database
 
         result = person_pb2.PersonListMessage()
         for person in persons :
@@ -64,6 +76,11 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
 
     def Create(self, request, context):
 
+        log.info(struct_message('Person received from Request',
+            firstname=request.first_name,
+            lastname=request.last_name,
+            companyname=request.company_name) )
+
         new_person = Person()
         new_person.first_name = request.first_name
         new_person.last_name = request.last_name
@@ -72,13 +89,18 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
         try:
             session.add(new_person)
             session.commit() 
-        except:
+        except Exception as e:
+            log.error(struct_message('Person is not persisted in PersonDB'))
             session.rollback()
-            raise
+            raise Exception(traceback.print_stack())
         finally:
             session.close()
 
-        
+        log.info(struct_message('Person persisted in database',
+            firstname=request.first_name,
+            lastname=request.last_name,
+            companyname=request.company_name) )
+
         request_person = person_pb2.PersonMessage(
             id=request.id,
             first_name=request.first_name,
@@ -101,5 +123,6 @@ def serve():
         server.stop(0)
 
 if __name__ == '__main__':
-    logging.basicConfig()
+    FORMAT = '%(levelname)s:%(name)s:%(asctime)s %(message)s'
+    logging.basicConfig(format=FORMAT, level=logging.DEBUG, datefmt='%m/%d/%Y %H:%M:%S')
     serve()

@@ -43,7 +43,16 @@ class LocationService:
     def retrieve(location_id) -> location__pb2.LocationMessage:
         channel = grpc.insecure_channel(f"{GRPC_HOST}:{GRPC_PORT}")
         stub = location_pb2_grpc.LocationServiceStub(channel)
-        location = stub.Get(location__pb2.LocationIdMessage(id=int(location_id)))
-        return location
+        try:
+            location = stub.Get(location__pb2.LocationIdMessage(id=int(location_id)))
+            return location
+        except:
+            return location__pb2.LocationMessage(
+                id = -1,
+                person_id = -1,
+                longitude = "",
+                latitude = "",
+                created_at = ""
+            )
 
 

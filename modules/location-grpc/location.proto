@@ -12,11 +12,6 @@ message LocationIdMessage {
   int32 id = 1;
 }
 
-message Empty {
-
-}
-
 service LocationService {
-    rpc Create(LocationMessage) returns (LocationMessage);
     rpc Get(LocationIdMessage) returns (LocationMessage);
 }

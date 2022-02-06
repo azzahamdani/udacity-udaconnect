@@ -168,6 +168,8 @@ services:
       - "5006:5000"
     depends_on:
     - postgres
+    - zookeeper
+    - kafka
   #--------------------------------------------------#
   #                  Kafka Steaming Confluent
   #--------------------------------------------------#
