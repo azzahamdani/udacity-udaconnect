@@ -1,7 +1,10 @@
+import logging
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
+
 
 db = SQLAlchemy()
 
@@ -15,6 +18,10 @@ def create_app(env=None):
     api = Api(app, title="UdaConnect API", version="0.1.0")
 
     CORS(app)  # Set CORS for development
+
+    # logger parameters
+    FORMAT = '%(levelname)s:%(name)s:%(asctime)s %(message)s'
+    logging.basicConfig(format=FORMAT, level=logging.DEBUG, datefmt='%m/%d/%Y %H:%M:%S')
 
     register_routes(api, app)
     db.init_app(app)

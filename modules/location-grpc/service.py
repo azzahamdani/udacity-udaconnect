@@ -11,7 +11,7 @@ import location_pb2_grpc
 import logging
 
 # import database from session 
-from models import session, Person, Location
+from models import session,  Location
 
 # structured data for logs 
 class StructuredMessage(object):
@@ -43,6 +43,7 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
                 .one()
             )
         except:
+            log.error(struct_message('Location is not found in LocationDB'))
             session.rollback()
             raise
         finally:
@@ -56,13 +57,13 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
             person_id = location.person_id,
             longitude = location.longitude,
             latitude = location.latitude,
-            created_at = location.creation_time.strftime("%m/%d/%Y, %H:%M:%S")
+            creation_time = location.creation_time.strftime("%m/%d/%Y, %H:%M:%S")
         )
 
         log.info(struct_message('Location received from LocationDB', 
         personid=locationresponse.person_id , 
         latitude=locationresponse.latitude , 
-        longitude=locationresponse.longitude, createdat=locationresponse.created_at))
+        longitude=locationresponse.longitude, createdat=locationresponse.creation_time))
 
         return locationresponse
 

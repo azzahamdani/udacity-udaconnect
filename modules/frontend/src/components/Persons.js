@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import Connection from "./Connection";
 import process from 'process';
-const { REACT_APP_URL } = process.env;
+// const { REACT_APP_URL } = process.env;
 
 class Persons extends Component {
   constructor(props) {
     super(props);
     // TODO: endpoint should be abstracted into a config variable
     // this.endpoint_url = "http://localhost:30001/api/persons";
-    console.log(`${REACT_APP_URL}`)
-    this.endpoint_url = `${REACT_APP_URL}`;
+    // this.endpoint_url = "http://localhost:5000/api/persons";
+    // this.endpoint_url = `${REACT_APP_URL}/api/persons`;
     this.state = {
       persons: [],
       display: null,

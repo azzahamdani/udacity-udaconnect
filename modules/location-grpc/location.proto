@@ -5,7 +5,7 @@ message LocationMessage {
   int32 person_id = 2;
   string longitude = 3;
   string latitude = 4;
-  string created_at = 5;
+  string creation_time = 5;
 }
 
 message LocationIdMessage {

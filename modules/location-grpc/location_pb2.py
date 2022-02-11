@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0elocation.proto\"i\n\x0fLocationMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x11\n\tperson_id\x18\x02 \x01(\x05\x12\x11\n\tlongitude\x18\x03 \x01(\t\x12\x10\n\x08latitude\x18\x04 \x01(\t\x12\x12\n\ncreated_at\x18\x05 \x01(\t\"\x1f\n\x11LocationIdMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x32>\n\x0fLocationService\x12+\n\x03Get\x12\x12.LocationIdMessage\x1a\x10.LocationMessageb\x06proto3'
+  serialized_pb=b'\n\x0elocation.proto\"l\n\x0fLocationMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x11\n\tperson_id\x18\x02 \x01(\x05\x12\x11\n\tlongitude\x18\x03 \x01(\t\x12\x10\n\x08latitude\x18\x04 \x01(\t\x12\x15\n\rcreation_time\x18\x05 \x01(\t\"\x1f\n\x11LocationIdMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x32>\n\x0fLocationService\x12+\n\x03Get\x12\x12.LocationIdMessage\x1a\x10.LocationMessageb\x06proto3'
 )
 
 
@@ -62,7 +62,7 @@ _LOCATIONMESSAGE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='created_at', full_name='LocationMessage.created_at', index=4,
+      name='creation_time', full_name='LocationMessage.creation_time', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -81,7 +81,7 @@ _LOCATIONMESSAGE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=18,
-  serialized_end=123,
+  serialized_end=126,
 )
 
 
@@ -112,8 +112,8 @@ _LOCATIONIDMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=125,
-  serialized_end=156,
+  serialized_start=128,
+  serialized_end=159,
 )
 
 DESCRIPTOR.message_types_by_name['LocationMessage'] = _LOCATIONMESSAGE
@@ -143,8 +143,8 @@ _LOCATIONSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=158,
-  serialized_end=220,
+  serialized_start=161,
+  serialized_end=223,
   methods=[
   _descriptor.MethodDescriptor(
     name='Get',

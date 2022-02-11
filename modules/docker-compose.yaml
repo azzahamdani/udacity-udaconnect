@@ -25,7 +25,7 @@ services:
     environment:
     - POSTGRES_USER=ct_admin
     - POSTGRES_PASSWORD=wowimsosecure
-    - POSTGRES_DB=geoconnections
+    - POSTGRES_DB=udaconnectperson
     ports:
     - "6432:5432"
     volumes:
@@ -38,7 +38,7 @@ services:
     environment:
     - POSTGRES_USER=ct_admin
     - POSTGRES_PASSWORD=wowimsosecure
-    - POSTGRES_DB=geoconnections
+    - POSTGRES_DB=udaconnectlocation
     ports:
     - "7432:5432"
     volumes:
@@ -71,7 +71,7 @@ services:
     environment:
       - DB_USERNAME=ct_admin
       - DB_PASSWORD=wowimsosecure
-      - DB_NAME=geoconnections
+      - DB_NAME=udaconnectlocation
       - DB_HOST=postgres-location
       - DB_PORT=5432
     volumes:
@@ -88,7 +88,7 @@ services:
     environment:
       - DB_USERNAME=ct_admin
       - DB_PASSWORD=wowimsosecure
-      - DB_NAME=geoconnections
+      - DB_NAME=udaconnectlocation
       - DB_HOST=postgres-location
       - DB_PORT=5432
       - TOPIC_NAME=location-events
@@ -101,13 +101,14 @@ services:
     - postgres
 
   person-grpc:
-    build: person-grpc
+    # build: person-grpc
+    image: person-grpc:latest
     container_name: person-grpc
     command: ["python", "service.py"]
     environment:
       - DB_USERNAME=ct_admin
       - DB_PASSWORD=wowimsosecure
-      - DB_NAME=geoconnections
+      - DB_NAME=udaconnectperson
       - DB_HOST=postgres-person
       - DB_PORT=5432
     volumes:
@@ -159,11 +160,13 @@ services:
     environment:
       - DB_USERNAME=ct_admin
       - DB_PASSWORD=wowimsosecure
-      - DB_NAME=geoconnections
+      - DB_NAME=udaconnectlocation
       - DB_HOST=postgres-location
       - DB_PORT=5432
       - GRPC_HOST=person-grpc
       - GRPC_PORT=5005
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
     ports:
       - "5006:5000"
     depends_on:
@@ -188,13 +191,13 @@ services:
     container_name: kafka
     ports:
       - '29092:29092'
-    
+      - '9092:9092'
     depends_on:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS:  PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS:  PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
@@ -241,25 +244,26 @@ services:
   #   depends_on:
   #     - zookeeper
 
-  # client:
-  #   tty: true
-  #   build: client
-  #   command: ["npm", "start"]
-  #   volumes:
-  #     - ./client:/frontend
-  #     - node-modules:/frontend/node_modules
-  #   environment:
-  #     - NODE_ENV=development
-  #   ports:
-  #     - '3000:3000'
-  #   depends_on:
-  #     - api
+  client:
+    build: frontend
+    container_name: frontend
+    command: ["npm", "start"]
+    volumes:
+      - ./frontend:/frontend
+      - node-modules:/frontend/node_modules
+    environment:
+      - NODE_ENV=development
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
 
 volumes:
   # node-modules:
   postgres: 
   postgres-person:
   postgres-location:
+  node-modules:
   zookeeper_data:
     driver: local
   kafka_data:

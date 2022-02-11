@@ -45,10 +45,10 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
         )
         else :
             log.info( struct_message('Person received from PersonDB', 
-            personid=person.id,
-            firstname=person.first_name,
-            lastname=person.last_name,
-            companyname=person.company_name) )
+            id=person.id,
+            first_name=person.first_name,
+            last_name=person.last_name,
+            company_name=person.company_name) )
 
             result = person_pb2.PersonMessage(
                 id=person.id,
@@ -61,9 +61,8 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
     def GetAll(self, request, context):
 
         persons = session.query(Person).all()
-        # TODO: log received message from database
-
         result = person_pb2.PersonListMessage()
+        
         for person in persons :
             current_person = person_pb2.PersonMessage(
                 id=person.id,
@@ -71,15 +70,16 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
                 last_name=person.last_name,
                 company_name=person.company_name,
             )
-            result.personmessages.extend([current_person])
+            result.persons.extend([current_person])
+
         return result
 
     def Create(self, request, context):
 
         log.info(struct_message('Person received from Request',
-            firstname=request.first_name,
-            lastname=request.last_name,
-            companyname=request.company_name) )
+            first_name=request.first_name,
+            last_name=request.last_name,
+            company_name=request.company_name) )
 
         new_person = Person()
         new_person.first_name = request.first_name
@@ -96,10 +96,10 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
         finally:
             session.close()
 
-        log.info(struct_message('Person persisted in database',
-            firstname=request.first_name,
-            lastname=request.last_name,
-            companyname=request.company_name) )
+        log.info(struct_message('Person persisted in PersonDB',
+            first_name=request.first_name,
+            last_name=request.last_name,
+            company_name=request.company_name) )
 
         request_person = person_pb2.PersonMessage(
             id=request.id,

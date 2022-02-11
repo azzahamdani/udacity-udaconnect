@@ -4,7 +4,7 @@ import os
 import logging
 
 # import database from session 
-from models import session, Person, Location
+from models import session, Location
 from geoalchemy2.functions import ST_AsText, ST_Point
 
 # grpc 
@@ -15,6 +15,8 @@ import person_pb2_grpc
 # grpc variables
 GRPC_HOST = os.environ["GRPC_HOST"]
 GRPC_PORT = os.environ["GRPC_PORT"]
+KAFKA_HOST= os.environ["KAFKA_HOST"]
+KAFKA_PORT= os.environ["KAFKA_PORT"]
 
 # structured data for logs 
 class StructuredMessage(object):
@@ -36,9 +38,13 @@ class LocationEvent(faust.Record, validation=True):
     id: int
     creation_time: str
 
+# app = faust.App(
+#     'location-app', 
+#     broker='kafka://kafka:9092')
+
 app = faust.App(
     'location-app', 
-    broker='kafka://kafka:9092')
+    broker=f"kafka://{KAFKA_HOST}:{KAFKA_PORT}")
 
 locations_kafka_topic = app.topic('location-events', value_type=LocationEvent)
 

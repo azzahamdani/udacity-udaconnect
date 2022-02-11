@@ -1,7 +1,8 @@
 from datetime import datetime
 import json
+import logging
 
-from app.udaconnect.models import Location, Person
+from app.udaconnect.models import Location
 from app.udaconnect.schemas import LocationSchema
 
 from app.udaconnect import location_pb2 as location__pb2
@@ -16,6 +17,19 @@ from typing import Optional, List
 DATE_FORMAT = "%Y-%m-%d"
 api = Namespace("UdaConnect", description="Connections via geolocation.")  # noqa
 
+logger = logging.getLogger()
+
+# structured data for logs 
+class StructuredMessage(object):
+    def __init__(self, message, **kwargs):
+        self.message = message
+        self.kwargs = kwargs
+
+    def __str__(self):
+        return '%s >>> %s' % (self.message, json.dumps(self.kwargs))
+
+struct_message = StructuredMessage
+
 # TODO: This needs better exception handling
 
 @api.route("/locations")
@@ -23,15 +37,51 @@ class LocationResource(Resource):
     @accepts(schema=LocationSchema)
     @responds(schema=LocationSchema)
     def post(self) -> Location:
-        request.get_json()
-        LocationEventService.producelocationevent(request.get_json())
+        locationevent=request.get_json()
+        LocationEventService.producelocationevent(locationevent)
+        logger.info(struct_message('Location sent from locations-event stream', 
+        personid=locationevent['person_id'], 
+        latitude=locationevent['latitude'], 
+        longitude=locationevent['longitude'], 
+        createdat=locationevent['creation_time']))
         return  make_response(jsonify("OK"))
 
 @api.route("/locations/<location_id>")
 @api.param("location_id", "Unique ID for a given Location", _in="query")
 class LocationResource(Resource):
     def get(self, location_id):
-        location: location__pb2.LocationMessage = LocationService.retrieve(location_id)
-        return json.loads(MessageToJson(location))
+
+        if location_id.isnumeric():
+            location: location__pb2.LocationMessage = LocationService.retrieve(location_id)
+            locationASJSON=json.loads(MessageToJson(location, preserving_proto_field_name=True))
+            if locationASJSON['id'] == -1 :
+                logger.error(struct_message('Location for Location ID not found', locationid=location_id))
+                response = make_response(jsonify({"Error": "Oups location not found"}), 404,)
+                return response
+            
+            logger.info(struct_message('Location received from location-grpc', 
+            personid=locationASJSON['person_id'] , 
+            latitude=locationASJSON['latitude'] , 
+            longitude=locationASJSON['longitude'], createdat=locationASJSON['creation_time']))
+
+            return locationASJSON
+        else:
+            logger.error(struct_message('Unauthorized Numerical value is required'))
+            return make_response(jsonify({"Unauthorized": "Numerical value as parameter is required"}), 401,)
+        # if locationASJSON['id'] == -1 :
+        #     logger.error(struct_message('Location for Location ID not found', locationid=perlocation_idson_id))
+        #     response = make_response(jsonify({"Error": "Oups location not found"}), 404,)
+        #     return response
+            
+        #     logger.info(struct_message('Location receivd from location-grpc',
+        #     first_name=personAsJSON['first_name'],
+        #     last_name=personAsJSON['last_name'],
+        #     company_name=personAsJSON['company_name']) )
+
+        #     return locationASJSON
+        # else:
+        #     logger.error(struct_message('Unauthorized Numerical value is required'))
+        #     return make_response(jsonify({"Unauthorized": "Numerical value as parameter is required"}), 401,)
+        # # return json.loads(MessageToJson(location, preserving_proto_field_name=True))
 
 
