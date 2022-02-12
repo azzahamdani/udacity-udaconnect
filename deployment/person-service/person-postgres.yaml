@@ -5,6 +5,7 @@ metadata:
   labels:
     type: local
     app: person-postgres
+    ms: person-service
 spec:
   storageClassName: manual
   capacity:
@@ -20,6 +21,7 @@ metadata:
   name: person-postgres-pv-claim
   labels:
     app: person-postgres
+    ms: person-service
 spec:
   storageClassName: manual
   accessModes:
@@ -34,6 +36,7 @@ metadata:
   name: person-postgres
   labels:
     app: person-postgres
+    ms: person-service
 spec:
   type: ClusterIP
   selector:
@@ -45,6 +48,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: person-postgres
+  labels:
+    app: person-postgres
+    ms: person-service
 spec:
   replicas: 1
   selector:

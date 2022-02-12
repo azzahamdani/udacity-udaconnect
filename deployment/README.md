@@ -1,15 +1,14 @@
-# Push Docker images
-## Docker commands used to build the application 
-docker build -t udaconnect-person-api -f ./Dockerfile .
-docker tag udaconnect-person-api:latest zoeid/udaconnect-person-api:latest
-docker push zoeid/udaconnect-person-api:latest
-
-
-
 # Deploy Application 
-1. Apply Person Microservice
 
+1. Apply kafka 
+```sh
+```
+
+2. Apply Person Microservice
+
+```sh
 kubectl apply -f person-service
+```
 
 
 
@@ -18,7 +17,7 @@ kubectl apply -f person-service
 
 1. seed location database
 ```sh
-sh scripts/run_db_cmd_k8s_location.sh $(kubectl get pod -l app=location-ms-postgres --no-headers -o jsonpath='{.items[0].metadata.name}{"\n"}')
+sh scripts/run_db_cmd_location.sh $(kubectl get pod -l app=location-ms-postgres --no-headers -o jsonpath='{.items[0].metadata.name}{"\n"}')
 ```
 2. seed person database
 ```sh

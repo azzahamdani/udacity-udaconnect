@@ -1,15 +1,8 @@
 import os
 import logging
-from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict
 
-from app import db
-from app.udaconnect.models import Person
-# from app.udaconnect.models import Connection, Location, Person
-# from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema
 from app.udaconnect.schemas import PersonSchema
-from geoalchemy2.functions import ST_AsText, ST_Point
-from sqlalchemy.sql import text
 
 import grpc
 from app.udaconnect import person_pb2 as person__pb2

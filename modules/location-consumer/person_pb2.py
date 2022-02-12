@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0cperson.proto\"X\n\rPersonMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x12\n\nfirst_name\x18\x02 \x01(\t\x12\x11\n\tlast_name\x18\x03 \x01(\t\x12\x14\n\x0c\x63ompany_name\x18\x04 \x01(\t\";\n\x11PersonListMessage\x12&\n\x0epersonmessages\x18\x01 \x03(\x0b\x32\x0e.PersonMessage\"\x1d\n\x0fPersonIdMessage\x12\n\n\x02id\x18\x01 \x01(\x05\"\x0e\n\x0c\x45mptyMessage2\x8f\x01\n\rPersonService\x12(\n\x06\x43reate\x12\x0e.PersonMessage\x1a\x0e.PersonMessage\x12\'\n\x03Get\x12\x10.PersonIdMessage\x1a\x0e.PersonMessage\x12+\n\x06GetAll\x12\r.EmptyMessage\x1a\x12.PersonListMessageb\x06proto3'
+  serialized_pb=b'\n\x0cperson.proto\"X\n\rPersonMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x12\n\nfirst_name\x18\x02 \x01(\t\x12\x11\n\tlast_name\x18\x03 \x01(\t\x12\x14\n\x0c\x63ompany_name\x18\x04 \x01(\t\"4\n\x11PersonListMessage\x12\x1f\n\x07persons\x18\x01 \x03(\x0b\x32\x0e.PersonMessage\"\x1d\n\x0fPersonIdMessage\x12\n\n\x02id\x18\x01 \x01(\x05\"\x0e\n\x0c\x45mptyMessage2\x8f\x01\n\rPersonService\x12(\n\x06\x43reate\x12\x0e.PersonMessage\x1a\x0e.PersonMessage\x12\'\n\x03Get\x12\x10.PersonIdMessage\x1a\x0e.PersonMessage\x12+\n\x06GetAll\x12\r.EmptyMessage\x1a\x12.PersonListMessageb\x06proto3'
 )
 
 
@@ -87,7 +87,7 @@ _PERSONLISTMESSAGE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='personmessages', full_name='PersonListMessage.personmessages', index=0,
+      name='persons', full_name='PersonListMessage.persons', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -106,7 +106,7 @@ _PERSONLISTMESSAGE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=106,
-  serialized_end=165,
+  serialized_end=158,
 )
 
 
@@ -137,8 +137,8 @@ _PERSONIDMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=167,
-  serialized_end=196,
+  serialized_start=160,
+  serialized_end=189,
 )
 
 
@@ -162,11 +162,11 @@ _EMPTYMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=198,
-  serialized_end=212,
+  serialized_start=191,
+  serialized_end=205,
 )
 
-_PERSONLISTMESSAGE.fields_by_name['personmessages'].message_type = _PERSONMESSAGE
+_PERSONLISTMESSAGE.fields_by_name['persons'].message_type = _PERSONMESSAGE
 DESCRIPTOR.message_types_by_name['PersonMessage'] = _PERSONMESSAGE
 DESCRIPTOR.message_types_by_name['PersonListMessage'] = _PERSONLISTMESSAGE
 DESCRIPTOR.message_types_by_name['PersonIdMessage'] = _PERSONIDMESSAGE
@@ -210,8 +210,8 @@ _PERSONSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=215,
-  serialized_end=358,
+  serialized_start=208,
+  serialized_end=351,
   methods=[
   _descriptor.MethodDescriptor(
     name='Create',

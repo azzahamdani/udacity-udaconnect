@@ -12,11 +12,31 @@ message LocationIdMessage {
   int32 id = 1;
 }
 
-message Empty {
+message LocationRequestMessage {
+  int32 person_id = 1;
+  string start_date = 2;
+  string end_date = 3;
+  int32 meters = 4;
+}
 
+message LocationDistanceMessage {
+  int32 person_id = 1;
+  string longitude = 2;
+  string latitude = 3;
+  int32 meters = 4;
+  string start_date = 5;
+  string end_date = 6;
+}
+
+message LocationsMessage {
+  repeated LocationDistanceMessage locations = 1;
+}
+
+message LocationsConnections {
+  repeated LocationMessage locations = 1;
 }
 
 service LocationService {
-    rpc Create(LocationMessage) returns (LocationMessage);
-    rpc Get(LocationIdMessage) returns (LocationMessage);
+  rpc Get(LocationIdMessage) returns (LocationMessage);
+  rpc GetLocationPersonConnections(LocationRequestMessage) returns(LocationsConnections);
 }

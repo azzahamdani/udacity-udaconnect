@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0elocation.proto\"l\n\x0fLocationMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x11\n\tperson_id\x18\x02 \x01(\x05\x12\x11\n\tlongitude\x18\x03 \x01(\t\x12\x10\n\x08latitude\x18\x04 \x01(\t\x12\x15\n\rcreation_time\x18\x05 \x01(\t\"\x1f\n\x11LocationIdMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x32>\n\x0fLocationService\x12+\n\x03Get\x12\x12.LocationIdMessage\x1a\x10.LocationMessageb\x06proto3'
+  serialized_pb=b'\n\x0elocation.proto\"l\n\x0fLocationMessage\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x11\n\tperson_id\x18\x02 \x01(\x05\x12\x11\n\tlongitude\x18\x03 \x01(\t\x12\x10\n\x08latitude\x18\x04 \x01(\t\x12\x15\n\rcreation_time\x18\x05 \x01(\t\"\x1f\n\x11LocationIdMessage\x12\n\n\x02id\x18\x01 \x01(\x05\"a\n\x16LocationRequestMessage\x12\x11\n\tperson_id\x18\x01 \x01(\x05\x12\x12\n\nstart_date\x18\x02 \x01(\t\x12\x10\n\x08\x65nd_date\x18\x03 \x01(\t\x12\x0e\n\x06meters\x18\x04 \x01(\x05\"\x87\x01\n\x17LocationDistanceMessage\x12\x11\n\tperson_id\x18\x01 \x01(\x05\x12\x11\n\tlongitude\x18\x02 \x01(\t\x12\x10\n\x08latitude\x18\x03 \x01(\t\x12\x0e\n\x06meters\x18\x04 \x01(\x05\x12\x12\n\nstart_date\x18\x05 \x01(\t\x12\x10\n\x08\x65nd_date\x18\x06 \x01(\t\"?\n\x10LocationsMessage\x12+\n\tlocations\x18\x01 \x03(\x0b\x32\x18.LocationDistanceMessage\";\n\x14LocationsConnections\x12#\n\tlocations\x18\x01 \x03(\x0b\x32\x10.LocationMessage2\x8e\x01\n\x0fLocationService\x12+\n\x03Get\x12\x12.LocationIdMessage\x1a\x10.LocationMessage\x12N\n\x1cGetLocationPersonConnections\x12\x17.LocationRequestMessage\x1a\x15.LocationsConnectionsb\x06proto3'
 )
 
 
@@ -116,8 +116,198 @@ _LOCATIONIDMESSAGE = _descriptor.Descriptor(
   serialized_end=159,
 )
 
+
+_LOCATIONREQUESTMESSAGE = _descriptor.Descriptor(
+  name='LocationRequestMessage',
+  full_name='LocationRequestMessage',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='person_id', full_name='LocationRequestMessage.person_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_date', full_name='LocationRequestMessage.start_date', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='end_date', full_name='LocationRequestMessage.end_date', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='meters', full_name='LocationRequestMessage.meters', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=161,
+  serialized_end=258,
+)
+
+
+_LOCATIONDISTANCEMESSAGE = _descriptor.Descriptor(
+  name='LocationDistanceMessage',
+  full_name='LocationDistanceMessage',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='person_id', full_name='LocationDistanceMessage.person_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='longitude', full_name='LocationDistanceMessage.longitude', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='latitude', full_name='LocationDistanceMessage.latitude', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='meters', full_name='LocationDistanceMessage.meters', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_date', full_name='LocationDistanceMessage.start_date', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='end_date', full_name='LocationDistanceMessage.end_date', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=261,
+  serialized_end=396,
+)
+
+
+_LOCATIONSMESSAGE = _descriptor.Descriptor(
+  name='LocationsMessage',
+  full_name='LocationsMessage',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='locations', full_name='LocationsMessage.locations', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=398,
+  serialized_end=461,
+)
+
+
+_LOCATIONSCONNECTIONS = _descriptor.Descriptor(
+  name='LocationsConnections',
+  full_name='LocationsConnections',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='locations', full_name='LocationsConnections.locations', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=463,
+  serialized_end=522,
+)
+
+_LOCATIONSMESSAGE.fields_by_name['locations'].message_type = _LOCATIONDISTANCEMESSAGE
+_LOCATIONSCONNECTIONS.fields_by_name['locations'].message_type = _LOCATIONMESSAGE
 DESCRIPTOR.message_types_by_name['LocationMessage'] = _LOCATIONMESSAGE
 DESCRIPTOR.message_types_by_name['LocationIdMessage'] = _LOCATIONIDMESSAGE
+DESCRIPTOR.message_types_by_name['LocationRequestMessage'] = _LOCATIONREQUESTMESSAGE
+DESCRIPTOR.message_types_by_name['LocationDistanceMessage'] = _LOCATIONDISTANCEMESSAGE
+DESCRIPTOR.message_types_by_name['LocationsMessage'] = _LOCATIONSMESSAGE
+DESCRIPTOR.message_types_by_name['LocationsConnections'] = _LOCATIONSCONNECTIONS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 LocationMessage = _reflection.GeneratedProtocolMessageType('LocationMessage', (_message.Message,), {
@@ -134,6 +324,34 @@ LocationIdMessage = _reflection.GeneratedProtocolMessageType('LocationIdMessage'
   })
 _sym_db.RegisterMessage(LocationIdMessage)
 
+LocationRequestMessage = _reflection.GeneratedProtocolMessageType('LocationRequestMessage', (_message.Message,), {
+  'DESCRIPTOR' : _LOCATIONREQUESTMESSAGE,
+  '__module__' : 'location_pb2'
+  # @@protoc_insertion_point(class_scope:LocationRequestMessage)
+  })
+_sym_db.RegisterMessage(LocationRequestMessage)
+
+LocationDistanceMessage = _reflection.GeneratedProtocolMessageType('LocationDistanceMessage', (_message.Message,), {
+  'DESCRIPTOR' : _LOCATIONDISTANCEMESSAGE,
+  '__module__' : 'location_pb2'
+  # @@protoc_insertion_point(class_scope:LocationDistanceMessage)
+  })
+_sym_db.RegisterMessage(LocationDistanceMessage)
+
+LocationsMessage = _reflection.GeneratedProtocolMessageType('LocationsMessage', (_message.Message,), {
+  'DESCRIPTOR' : _LOCATIONSMESSAGE,
+  '__module__' : 'location_pb2'
+  # @@protoc_insertion_point(class_scope:LocationsMessage)
+  })
+_sym_db.RegisterMessage(LocationsMessage)
+
+LocationsConnections = _reflection.GeneratedProtocolMessageType('LocationsConnections', (_message.Message,), {
+  'DESCRIPTOR' : _LOCATIONSCONNECTIONS,
+  '__module__' : 'location_pb2'
+  # @@protoc_insertion_point(class_scope:LocationsConnections)
+  })
+_sym_db.RegisterMessage(LocationsConnections)
+
 
 
 _LOCATIONSERVICE = _descriptor.ServiceDescriptor(
@@ -143,8 +361,8 @@ _LOCATIONSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=161,
-  serialized_end=223,
+  serialized_start=525,
+  serialized_end=667,
   methods=[
   _descriptor.MethodDescriptor(
     name='Get',
@@ -153,6 +371,16 @@ _LOCATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_LOCATIONIDMESSAGE,
     output_type=_LOCATIONMESSAGE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='GetLocationPersonConnections',
+    full_name='LocationService.GetLocationPersonConnections',
+    index=1,
+    containing_service=None,
+    input_type=_LOCATIONREQUESTMESSAGE,
+    output_type=_LOCATIONSCONNECTIONS,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

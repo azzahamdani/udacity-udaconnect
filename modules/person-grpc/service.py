@@ -109,7 +109,6 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
         )
         return request_person
         
-
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     person_pb2_grpc.add_PersonServiceServicer_to_server(PersonServicer(), server)

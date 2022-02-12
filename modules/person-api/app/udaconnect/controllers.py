@@ -1,24 +1,15 @@
-from datetime import datetime
-from hashlib import new
 import json
 import logging
-from operator import ne
 
-from app.udaconnect.models import Person
-# from app.udaconnect.models import Connection, Location
-# from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema
 from app.udaconnect.schemas import PersonSchema
-
-
 from app.udaconnect import person_pb2 as person__pb2
-from google.protobuf.json_format import MessageToJson, MessageToDict
+from google.protobuf.json_format import MessageToJson
 
-# from app.udaconnect.services import ConnectionService, LocationService, PersonService
 from app.udaconnect.services import PersonService
 from flask import request, jsonify, make_response
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
-from typing import Optional, List
+
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -37,14 +28,10 @@ class StructuredMessage(object):
 
 struct_message = StructuredMessage
 
-
-# TODO: This needs better exception handling
-
 @api.route("/persons")
 class PersonsResource(Resource):
     @accepts(schema=PersonSchema)
-    @responds(schema=PersonSchema)
-    def post(self): # -> Person
+    def post(self):
         payload = request.get_json()
         new_person: person__pb2.PersonMessage = PersonService.create(payload)
         newpersonAsJSON=json.loads(MessageToJson(new_person, preserving_proto_field_name=True))
@@ -59,8 +46,7 @@ class PersonsResource(Resource):
 
         return newpersonAsJSON
 
-    # @responds(schema=PersonSchema, many=True)
-    def get(self): # -> List[Person]
+    def get(self): 
         personlistmessage: person__pb2.PersonListMessage = PersonService.retrieve_all()
         personlistmessageAsJSON=json.loads(MessageToJson(personlistmessage, preserving_proto_field_name=True))
         logger.info(struct_message('Persons received from person-grpc server', persons=personlistmessageAsJSON))
@@ -70,8 +56,7 @@ class PersonsResource(Resource):
 @api.route("/persons/<person_id>")
 @api.param("person_id", "Unique ID for a given Person", _in="query")
 class PersonResource(Resource):
-    # @responds(schema=PersonSchema)
-    def get(self, person_id): # -> Person
+    def get(self, person_id):
         if person_id.isnumeric():
             person: person__pb2.PersonMessage = PersonService.retrieve(person_id)
             personAsJSON=json.loads(MessageToJson(person, preserving_proto_field_name=True))

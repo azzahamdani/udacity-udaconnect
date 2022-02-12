@@ -7,3 +7,5 @@ data:
   DB_PORT: "5432"
 metadata:
   name: person-db-env
+  labels:
+    ms: person-service
