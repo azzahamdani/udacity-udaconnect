@@ -125,7 +125,7 @@ services:
     environment:
       - DB_USERNAME=ct_admin
       - DB_PASSWORD=wowimsosecure
-      - DB_NAME=geoconnections
+      - DB_NAME=udaconnectperson
       - DB_HOST=postgres-person
       - DB_PORT=5432
       - GRPC_HOST=person-grpc
@@ -144,9 +144,13 @@ services:
     environment:
       - DB_USERNAME=ct_admin
       - DB_PASSWORD=wowimsosecure
-      - DB_NAME=geoconnections
+      - DB_NAME=udaconnectlocation
       - DB_HOST=postgres-location
       - DB_PORT=5432
+      - LOCATION_GRPC_HOST=location-grpc
+      - LOCATION_GRPC_PORT=5005
+      - PERSON_GRPC_HOST=person-grpc
+      - PERSON_GRPC_PORT=5005
     ports:
       - "5003:5000"
     depends_on:

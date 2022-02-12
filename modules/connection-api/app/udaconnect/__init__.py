@@ -1,3 +1,8 @@
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
 from app.udaconnect.models import Connection, Location, Person  # noqa
 from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema  # noqa
 

@@ -8,7 +8,7 @@ class Persons extends Component {
     super(props);
     // TODO: endpoint should be abstracted into a config variable
     // this.endpoint_url = "http://localhost:30001/api/persons";
-    // this.endpoint_url = "http://localhost:5000/api/persons";
+    this.endpoint_url = "http://localhost:5002/api/persons";
     // this.endpoint_url = `${REACT_APP_URL}/api/persons`;
     this.state = {
       persons: [],

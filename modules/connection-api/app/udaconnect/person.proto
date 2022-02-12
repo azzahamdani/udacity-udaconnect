@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+message PersonMessage {
+    int32 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string company_name = 4;
+}
+
+message PersonListMessage {
+    repeated PersonMessage persons = 1;
+}
+
+message PersonIdMessage {
+    int32 id = 1;         
+}
+
+message EmptyMessage {
+
+}
+
+service PersonService {
+    rpc Create(PersonMessage) returns (PersonMessage);
+    rpc Get(PersonIdMessage) returns (PersonMessage);
+    rpc GetAll(EmptyMessage) returns (PersonListMessage);
+}

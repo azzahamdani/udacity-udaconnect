@@ -3,6 +3,8 @@ import sys
 import json
 
 from concurrent import futures
+from datetime import datetime, timedelta
+from sqlalchemy.sql import text
 
 import grpc
 import location_pb2
@@ -11,7 +13,7 @@ import location_pb2_grpc
 import logging
 
 # import database from session 
-from models import session,  Location
+from models import session,  Location, db
 
 # structured data for logs 
 class StructuredMessage(object):
@@ -33,7 +35,6 @@ log = logging.getLogger()
 class LocationServicer(location_pb2_grpc.LocationServiceServicer):
     def Get(self, request, context):
 
-        
         log.info(struct_message('Location ID in Request', locationid=request.id))
 
         try:
@@ -66,6 +67,94 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
         longitude=locationresponse.longitude, createdat=locationresponse.creation_time))
 
         return locationresponse
+    
+    def GetLocationPersonConnections(self, request, context):
+
+        log.info(struct_message('Request', id=request.person_id , 
+            start_date=request.start_date, 
+            end_date=request.end_date , 
+            meters=request.meters))
+        
+        start_date_datetime= datetime.strptime(request.start_date,'%Y-%m-%d' )
+        end_date_datetime= datetime.strptime(request.end_date,'%Y-%m-%d' )
+
+        locations = session.query(Location).filter(
+            Location.person_id == request.person_id
+        ).filter(Location.creation_time < end_date_datetime).filter(
+            Location.creation_time >= start_date_datetime
+        ).all()
+        
+        log.info(struct_message('Locations for PersonID from LocationDB', locations=str(locations)))
+
+        data = []
+        for location in locations:
+            data.append(
+                {
+                    "person_id": location.person_id,
+                    "longitude": location.longitude,
+                    "latitude": location.latitude,
+                    "meters": request.meters,
+                    "start_date": request.start_date,
+                    "end_date": (end_date_datetime + timedelta(days=1)).strftime("%Y-%m-%d"),
+                }
+            )
+        
+        log.info(struct_message('data', data=data ))
+        
+        query = text(
+            """
+        SELECT  person_id, id, ST_X(coordinate), ST_Y(coordinate), creation_time
+        FROM    location
+        WHERE   ST_DWithin(coordinate::geography,ST_SetSRID(ST_MakePoint(:latitude,:longitude),4326)::geography, :meters)
+        AND     person_id != :person_id
+        AND     TO_DATE(:start_date, 'YYYY-MM-DD') <= creation_time
+        AND     TO_DATE(:end_date, 'YYYY-MM-DD') > creation_time;
+        """
+        )
+
+        locationsconnections = location_pb2.LocationsConnections()
+
+        for line in tuple(data):
+            for (
+                exposed_person_id,
+                location_id,
+                exposed_lat,
+                exposed_long,
+                exposed_time,
+            ) in db.engine.execute(query, **line):
+                location = Location(
+                    id=location_id,
+                    person_id=exposed_person_id,
+                    creation_time=exposed_time,
+                )
+                location.set_wkt_with_coords(exposed_lat, exposed_long)
+                # log.info(struct_message('Location', locationid=location.id,
+                # location_person_id=location.person_id, 
+                # locationtime=location.creation_time.strftime('%Y-%m-%d'),
+                # locationlong=location.longitude,
+                # locationlat=location.latitude))
+
+                locationconnection=location_pb2.LocationMessage(
+                    id=location.person_id,
+                    person_id=location.person_id,
+                    longitude=location.longitude,
+                    latitude=location.latitude,
+                    creation_time=location.creation_time.strftime('%Y-%m-%d')
+                )
+                locationsconnections.locations.extend([locationconnection])
+
+                # result.append(location)
+
+                # result.append(
+                #     Connection(
+                #         person=person_map[exposed_person_id], location=location,
+                #     )
+                # )
+
+        
+
+        return locationsconnections
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
