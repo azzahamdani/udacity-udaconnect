@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kafka-create-topics
+spec:
+  template:
+    metadata:
+      name: kafka-create-topics
+    spec:
+      containers:
+      - name: kafka-create-topics
+        image: confluentinc/cp-kafka:5.2.0
+        command: ["bash", "-c"]
+        args: ["echo Waiting for Kafka to be ready... && cub kafka-ready -b kafka:9092 1 20 && kafka-topics --create --topic location-events --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 && exit 0"]
+      restartPolicy: Never
+  backoffLimit: 4

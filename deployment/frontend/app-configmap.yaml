@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: updaconnect-app-env
+data:
+ config.js: "window.REACT_APP_PERSON_URL=\"44.201.33.168:30000\"\r\nwindow.REACT_APP_CONNECTION_URL=\"44.201.33.168:30000\""

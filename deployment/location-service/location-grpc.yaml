@@ -2,69 +2,64 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: udaconnect-person-api
-    app: person-service
-  name: udaconnect-person-api
+    service: udaconnect-location-grpc
+    app: location-service
+  name: udaconnect-location-grpc
 spec:
   ports:
-  - name: "5000"
-    port: 5000
-    targetPort: 5000
-    nodePort: 30001
+  - name: "5005"
+    port: 5005
+    targetPort: 5005
   selector:
-    service: udaconnect-person-api
-  type: NodePort
+    service: udaconnect-location-grpc
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: udaconnect-person-api
-    app: person-service
-  name: udaconnect-person-api
+    service: udaconnect-location-grpc
+    app: location-service
+  name: udaconnect-location-grpc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: udaconnect-person-api
+      service: udaconnect-location-grpc
   template:
     metadata:
       labels:
-        service: udaconnect-person-api
-        app: person-service
+        service: udaconnect-location-grpc
+        app: location-service
     spec:
       containers:
-      - image: zoeid/udaconnect-person-api
-        name: udaconnect-person-api
+      - image: zoeid/udaconnect-location-grpc
+        name: udaconnect-location-grpc
         imagePullPolicy: Always
         env:
         - name: DB_USERNAME
           valueFrom:
             configMapKeyRef:
-              name: person-db-env
+              name: location-db-env
               key: DB_USERNAME
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: person-db-secret
+              name: location-db-secret
               key: DB_PASSWORD
         - name: DB_NAME
           valueFrom:
             configMapKeyRef:
-              name: person-db-env
+              name: location-db-env
               key: DB_NAME
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
-              name: person-db-env
+              name: location-db-env
               key: DB_HOST
         - name: DB_PORT
           valueFrom:
             configMapKeyRef:
-              name: person-db-env
+              name: location-db-env
               key: DB_PORT
-        - name: GRPC_HOST
-          value: udaconnect-person-grpc
-        - name: GRPC_PORT
-          value: "5005" 
       restartPolicy: Always

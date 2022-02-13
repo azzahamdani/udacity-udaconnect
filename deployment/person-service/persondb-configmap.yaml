@@ -8,4 +8,4 @@ data:
 metadata:
   name: person-db-env
   labels:
-    ms: person-service
+    app: person-service

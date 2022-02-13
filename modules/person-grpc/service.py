@@ -10,6 +10,7 @@ import logging
 import grpc
 import person_pb2
 import person_pb2_grpc
+from google.protobuf.json_format import MessageToJson
 
 # import database from session 
 from models import session, Person
@@ -56,6 +57,7 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
                 last_name=person.last_name,
                 company_name=person.company_name,
             )
+        log.info(struct_message('Location Connections Received from LocationDB', locations=json.loads(MessageToJson(result,preserving_proto_field_name=True ))))
         return result
     
     def GetAll(self, request, context):

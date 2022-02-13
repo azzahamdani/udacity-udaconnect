@@ -1,5 +1,3 @@
-# TODO: complete kafka manifest
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,9 +9,9 @@ spec:
   selector:
     app: kafka
   ports:
-   - name: port9092
+   - name: "9092"
      port: 9092
-   - name: port29029
+   - name: "29029"
      port: 29092
 ---
 apiVersion: apps/v1
@@ -34,6 +32,7 @@ spec:
         - name: kafka
           image: confluentinc/cp-kafka:5.2.0
           imagePullPolicy: "IfNotPresent"
+          command: ["bash", "-c", "unset KAFKA_PORT; /etc/confluent/docker/run"]
           ports:
             - containerPort: 9092
             - containerPort: 29092
@@ -43,13 +42,10 @@ spec:
           - name: KAFKA_ZOOKEEPER_CONNECT
             value: zookeeper:2181
           - name: KAFKA_ADVERTISED_LISTENERS
-            value: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092
+            value: "PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092"
           - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
             value: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
           - name: KAFKA_INTER_BROKER_LISTENER_NAME
             value: PLAINTEXT
-          - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
-            value: "false"
           - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
             value: "1"       
-

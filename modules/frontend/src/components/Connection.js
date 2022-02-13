@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import process from 'process';
-// const { REACT_APP_URL } = process.env;
+
 
 class Connection extends Component {
   constructor(props) {
@@ -26,7 +26,8 @@ class Connection extends Component {
       // TODO: endpoint should be abstracted into a config variable
       fetch(
         // `http://localhost:5000/api/persons/${personId}/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5`
-        `http://localhost:5003/api/connections?person_id=${personId}&start_date=2020-01-01&end_date=2020-12-30&distance=5`
+        // `http://localhost:5003/api/connections?person_id=${personId}&start_date=2020-01-01&end_date=2020-12-30&distance=5`
+        `http://${window.REACT_APP_CONNECTION_URL}/api/connections?person_id=${personId}&start_date=2020-01-01&end_date=2020-12-30&distance=5`
         // `${REACT_APP_URL}/${personId}/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5`
       )
         .then((response) => response.json())

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     service: udaconnect-person-grpc
-    ms: person-service
+    app: person-service
   name: udaconnect-person-grpc
 spec:
   ports:
@@ -19,7 +19,7 @@ kind: Deployment
 metadata:
   labels:
     service: udaconnect-person-grpc
-    ms: person-service
+    app: person-service
   name: udaconnect-person-grpc
 spec:
   replicas: 1
@@ -30,6 +30,7 @@ spec:
     metadata:
       labels:
         service: udaconnect-person-grpc
+        app: person-service
     spec:
       containers:
       - image: zoeid/udaconnect-person-grpc

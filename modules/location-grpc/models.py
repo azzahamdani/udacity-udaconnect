@@ -9,11 +9,12 @@ from geoalchemy2.shape import to_shape
 from shapely.geometry.point import Point
 
 from sqlalchemy import create_engine  
-from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Integer, String
+# from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import BigInteger, Column, DateTime, Integer 
 from sqlalchemy.ext.declarative import declarative_base  
 from sqlalchemy.orm import sessionmaker
 
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+# from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.ext.hybrid import hybrid_property
 
 DB_USERNAME = os.environ["DB_USERNAME"]
@@ -27,16 +28,6 @@ db_string = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_N
 db = create_engine(db_string) 
 base = declarative_base()
 
-# db.Model
-# class Person(base):
-#     __tablename__ = "person"
-
-#     id = Column(Integer, primary_key=True)
-#     first_name = Column(String, nullable=False)
-#     last_name = Column(String, nullable=False)
-#     company_name = Column(String, nullable=False)
-
-#     person_id = Column(Integer, ForeignKey(Person.id), nullable=False)
 class Location(base):
     __tablename__ = "location"
 

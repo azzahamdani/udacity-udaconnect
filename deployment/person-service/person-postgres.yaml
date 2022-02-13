@@ -4,8 +4,8 @@ metadata:
   name: person-postgres-volume
   labels:
     type: local
-    app: person-postgres
-    ms: person-service
+    service: person-postgres
+    app: person-service
 spec:
   storageClassName: manual
   capacity:
@@ -20,8 +20,8 @@ apiVersion: v1
 metadata:
   name: person-postgres-pv-claim
   labels:
-    app: person-postgres
-    ms: person-service
+    service: person-postgres
+    app: person-service
 spec:
   storageClassName: manual
   accessModes:
@@ -35,12 +35,12 @@ kind: Service
 metadata:
   name: person-postgres
   labels:
-    app: person-postgres
-    ms: person-service
+    service: person-postgres
+    app: person-service
 spec:
   type: ClusterIP
   selector:
-    app: person-postgres
+    service: person-postgres
   ports:
    - port: 5432
 ---
@@ -49,17 +49,18 @@ kind: Deployment
 metadata:
   name: person-postgres
   labels:
-    app: person-postgres
-    ms: person-service
+    service: person-postgres
+    app: person-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: person-postgres
+      service: person-postgres
   template:
     metadata:
       labels:
-        app: person-postgres
+        service: person-postgres
+        app: person-service
     spec:
       containers:
         - name: postgres

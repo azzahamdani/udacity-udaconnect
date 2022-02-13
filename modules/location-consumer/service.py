@@ -5,7 +5,7 @@ import logging
 
 # import database from session 
 from models import session, Location
-from geoalchemy2.functions import ST_AsText, ST_Point
+from geoalchemy2.functions import ST_Point
 
 # grpc 
 import grpc
@@ -38,10 +38,6 @@ class LocationEvent(faust.Record, validation=True):
     id: int
     creation_time: str
 
-# app = faust.App(
-#     'location-app', 
-#     broker='kafka://kafka:9092')
-
 app = faust.App(
     'location-app', 
     broker=f"kafka://{KAFKA_HOST}:{KAFKA_PORT}")
@@ -60,7 +56,6 @@ async def process(locationevents):
 
 
 def createlocation(locationevent):
-        # TODO : gRPC call to person-grpc : function exists
         channel = grpc.insecure_channel(f"{GRPC_HOST}:{GRPC_PORT}")
         stub = person_pb2_grpc.PersonServiceStub(channel)
         person = stub.Get(person_pb2.PersonIdMessage(id=int(locationevent.person_id)))
@@ -78,6 +73,8 @@ def createlocation(locationevent):
                 longitude=locationevent.longitude, 
                 createdat=locationevent.creation_time))
             except:
+                app.logger.error(struct_message('Location not persisted in LocationDB', 
+                location=new_location))
                 session.rollback()
                 raise
             finally:
@@ -86,7 +83,6 @@ def createlocation(locationevent):
             app.logger.error(struct_message('Person for LocationEvent person ID not found', 
             personid=locationevent.person_id))
         
-
 
 if __name__ == '__main__':
     FORMAT = '%(levelname)s:%(name)s:%(asctime)s %(message)s'

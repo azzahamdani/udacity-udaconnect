@@ -1,7 +1,6 @@
 import logging
-# from datetime import datetime, timedelta
 from json import dumps
-from typing import Dict, List
+from typing import Dict
 
 from app.udaconnect.schemas import  LocationSchema
 
@@ -30,10 +29,6 @@ class LocationEventService:
         if validation_results:
             logger.warning(f"Unexpected data format in payload: {validation_results}")
             raise Exception(f"Invalid payload: {validation_results}")
-        # TODO : produce a message using kafka python
-        # producer = KafkaProducer(bootstrap_servers=kafka_server, value_serializer=lambda v: dumps(v).encode('utf-8'))
-        # producer.send(topic_name, dumps(location))
-        # producer.flush()
         producer = Producer({'bootstrap.servers': kafka_server})
         producer.produce(topic_name, value=dumps(location))
         producer.flush()

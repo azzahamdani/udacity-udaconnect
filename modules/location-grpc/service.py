@@ -1,5 +1,5 @@
 import time
-import sys
+# import sys
 import json
 
 from concurrent import futures
@@ -9,6 +9,7 @@ from sqlalchemy.sql import text
 import grpc
 import location_pb2
 import location_pb2_grpc
+from google.protobuf.json_format import MessageToJson
 
 import logging
 
@@ -28,9 +29,6 @@ struct_message = StructuredMessage
 
 # setting the logger 
 log = logging.getLogger()
-
-
-# TODO : change all prints into logs
 
 class LocationServicer(location_pb2_grpc.LocationServiceServicer):
     def Get(self, request, context):
@@ -98,9 +96,7 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
                     "end_date": (end_date_datetime + timedelta(days=1)).strftime("%Y-%m-%d"),
                 }
             )
-        
-        log.info(struct_message('data', data=data ))
-        
+      
         query = text(
             """
         SELECT  person_id, id, ST_X(coordinate), ST_Y(coordinate), creation_time
@@ -128,11 +124,6 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
                     creation_time=exposed_time,
                 )
                 location.set_wkt_with_coords(exposed_lat, exposed_long)
-                # log.info(struct_message('Location', locationid=location.id,
-                # location_person_id=location.person_id, 
-                # locationtime=location.creation_time.strftime('%Y-%m-%d'),
-                # locationlong=location.longitude,
-                # locationlat=location.latitude))
 
                 locationconnection=location_pb2.LocationMessage(
                     id=location.person_id,
@@ -142,17 +133,8 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
                     creation_time=location.creation_time.strftime('%Y-%m-%d')
                 )
                 locationsconnections.locations.extend([locationconnection])
-
-                # result.append(location)
-
-                # result.append(
-                #     Connection(
-                #         person=person_map[exposed_person_id], location=location,
-                #     )
-                # )
-
-        
-
+                
+        log.info(struct_message('Location Connections Received from LocationDB', locations=json.loads(MessageToJson(locationsconnections,preserving_proto_field_name=True ))))
         return locationsconnections
 
 

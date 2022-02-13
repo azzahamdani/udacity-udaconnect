@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import logging
 
+
 from app.udaconnect.models import Location
 from app.udaconnect.schemas import LocationSchema
 
@@ -12,7 +13,7 @@ from app.udaconnect.services import  LocationService, LocationEventService
 from flask import request, jsonify, make_response
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
-from typing import Optional, List
+# from typing import Optional, List
 
 DATE_FORMAT = "%Y-%m-%d"
 api = Namespace("UdaConnect", description="Connections via geolocation.")  # noqa
@@ -30,20 +31,14 @@ class StructuredMessage(object):
 
 struct_message = StructuredMessage
 
-# TODO: This needs better exception handling
-
 @api.route("/locations")
 class LocationResource(Resource):
     @accepts(schema=LocationSchema)
-    @responds(schema=LocationSchema)
     def post(self) -> Location:
         locationevent=request.get_json()
-        LocationEventService.producelocationevent(locationevent)
         logger.info(struct_message('Location sent from locations-event stream', 
-        personid=locationevent['person_id'], 
-        latitude=locationevent['latitude'], 
-        longitude=locationevent['longitude'], 
-        createdat=locationevent['creation_time']))
+        locationevent=locationevent))
+        LocationEventService.producelocationevent(locationevent)
         return  make_response(jsonify("OK"))
 
 @api.route("/locations/<location_id>")
@@ -68,20 +63,5 @@ class LocationResource(Resource):
         else:
             logger.error(struct_message('Unauthorized Numerical value is required'))
             return make_response(jsonify({"Unauthorized": "Numerical value as parameter is required"}), 401,)
-        # if locationASJSON['id'] == -1 :
-        #     logger.error(struct_message('Location for Location ID not found', locationid=perlocation_idson_id))
-        #     response = make_response(jsonify({"Error": "Oups location not found"}), 404,)
-        #     return response
-            
-        #     logger.info(struct_message('Location receivd from location-grpc',
-        #     first_name=personAsJSON['first_name'],
-        #     last_name=personAsJSON['last_name'],
-        #     company_name=personAsJSON['company_name']) )
-
-        #     return locationASJSON
-        # else:
-        #     logger.error(struct_message('Unauthorized Numerical value is required'))
-        #     return make_response(jsonify({"Unauthorized": "Numerical value as parameter is required"}), 401,)
-        # # return json.loads(MessageToJson(location, preserving_proto_field_name=True))
-
+        
 

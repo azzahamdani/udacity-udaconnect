@@ -101,8 +101,7 @@ services:
     - postgres
 
   person-grpc:
-    # build: person-grpc
-    image: person-grpc:latest
+    build: person-grpc
     container_name: person-grpc
     command: ["python", "service.py"]
     environment:
@@ -251,12 +250,14 @@ services:
   client:
     build: frontend
     container_name: frontend
-    command: ["npm", "start"]
+    # command: ["npm", "start"]
     volumes:
       - ./frontend:/frontend
       - node-modules:/frontend/node_modules
     environment:
       - NODE_ENV=development
+      - URL=localhost:5003
+      - PERSON_URL=localhost:5002
     ports:
       - '3000:3000'
     depends_on:
