@@ -59,8 +59,8 @@ sh scripts/run_db_cmd_location.sh $(kubectl get pod -l service=location-postgres
 sh scripts/run_db_cmd_person.sh $(kubectl get pod -l service=person-postgres --no-headers -o jsonpath='{.items[0].metadata.name}{"\n"}')
 ```
 
-Once the project is up and running, you should be able to see 3 deployments and 3 services in Kubernetes:
-`kubectl get pods` and `kubectl get services`
+Once the project is up and running, you should be able to see 11 deployment of the system and 11 services exposing them as well as an ingress object with behind the scene ingress-controller as API-gateway 
+`kubectl get pods` and `kubectl get services` and `kubectl describe ingress udaconnect-ingress`
 
 These pages should also load on your web browser:
 * `http://localhost:30000/api/` - Base path for API
