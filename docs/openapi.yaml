@@ -1,18 +1,18 @@
-swagger: "2.0"
+sswagger: "2.0"
 info:
   version: "1.0.0"
   title: "Swagger UdaConnect"
   contact:
-    email: "hedi.abed.0@gmail.com"
-host: "localhost:30012"
+    email: "azzahamdani@gmail.com"
+host: "localhost:30000"
 basePath: "/api"
 tags:
 - name: "persons"
-  description: "Everything about creating and retrieving a Persons"
+  description: "Creating and Reading Persons"
 - name: "locations"
-  description: "Everything about creating and retrieving a Persons locations"
+  description: "Creating and Reading Locations"
 - name: "connections"
-  description: "Retrieving connections close to a person"
+  description: "Reading Locations of Persons within a distance and time bounderies of a given Person "
 schemes:
 - "http"
 paths:
@@ -20,8 +20,8 @@ paths:
     post:
       tags:
       - "persons"
-      summary: "Add a new person to the app"
-      description: ""
+      summary: "Add a Person"
+      description: "Endpoint used to add a person/user to the UdaConnect"
       operationId: "addPerson"
       consumes:
       - "application/json"
@@ -30,13 +30,15 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "add a person to uda-connect app"
+        description: "Json object containing a person attributes"
         required: true
         schema:
           $ref: "#/definitions/PersonSchema"
       responses:
-        "405":
-          description: "Invalid input"
+        "500":
+          description: "internal server error"
+        "400":
+          description: "bad request"
         "201":
           description: "created"
           schema:
@@ -44,26 +46,24 @@ paths:
     get:
       tags:
       - "persons"
-      summary: "get all persons"
-      description: ""
+      summary: "Get all Persons"
+      description: "Endpoint used to fetch all persons/users of UdaConnect"
       operationId: "getAllPersons"
       produces:
       - "application/json"
       responses:
         "200":
-          description: "successful operation"
+          description: "all persons fetched"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/PersonSchema"
-        "400":
-          description: "Invalid status value"
   /persons/{person_id}:
     get:
       tags:
       - "persons"
-      summary: "Find person by ID"
-      description: "Returns a single person"
+      summary: "Get a Person by providing an ID"
+      description: "Endpoint used to fetch a person by giving its unique ID"
       operationId: "getPersonById"
       produces:
       - "application/json"
@@ -76,19 +76,19 @@ paths:
         format: "int64"
       responses:
         "200":
-          description: "successful operation"
+          description: "person fetched"
           schema:
             $ref: "#/definitions/PersonSchema"
-        "400":
-          description: "Invalid ID supplied"
+        "401":
+          description: "unauthorized"
         "404":
-          description: "Person not found"
+          description: "person not found"
   /locations:
     post:
       tags:
       - "locations"
-      summary: "Add a new location to the app"
-      description: "Add location for an existing person"
+      summary: "Add a Location"
+      description: "Endpoint used to add a location to UdaConnect for a given User/Person using its ID"
       operationId: "addLocation"
       consumes:
       - "application/json"
@@ -97,23 +97,21 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "add a person to uda-connect app"
+        description: "JSON object containing location attributes including person_id"
         required: true
         schema:
           $ref: "#/definitions/LocationSchema"
       responses:
-        "405":
-          description: "Invalid input"
-        "201":
-          description: "created"
+        "200":
+          description: "sent to event-stream"
           schema:
             $ref: "#/definitions/LocationSchema"
-  /locations{location_id}:
+  /locations/{location_id}:
     get:
       tags:
       - "locations"
-      summary: "Find location by ID"
-      description: "Returns a single location"
+      summary: "Get a Location by Providing an ID"
+      description: "Endpoint used to fetch a location by giving its unique ID "
       operationId: "getLocationById"
       produces:
       - "application/json"
@@ -126,18 +124,18 @@ paths:
         format: "int64"
       responses:
         "200":
-          description: "successful operation"
+          description: "location fetched"
           schema:
             $ref: "#/definitions/LocationSchema"
-        "400":
-          description: "Invalid ID supplied"
+        "401":
+          description: "unauthorized"
         "404":
           description: "Person not found"
   /connections:
     get:
       tags:
       - "connections"
-      summary: "Find person by ID"
+      summary: "Get locations within a distance and a time bounderies "
       description: "Returns a single person"
       operationId: "getConnections"
       produces:
@@ -173,7 +171,7 @@ paths:
         default: 5
       responses:
         "200":
-          description: "successful operation"
+          description: "locations fetched"
           schema:
             type: "array"
             items:

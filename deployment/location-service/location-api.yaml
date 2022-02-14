@@ -10,10 +10,9 @@ spec:
   - name: "5000"
     port: 5000
     targetPort: 5000
-    nodePort: 30002
   selector:
     service: udaconnect-location-api
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment

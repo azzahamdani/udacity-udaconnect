@@ -1,0 +1,71 @@
+#--------------------------------------------------------------------#
+#  person-grpc/Create
+# -------------------------------------------------------------------#
+Request Type 
+PersonMessage
+* id :         (int32 ) The Unique ID of the person to be created
+* first_name : (string) The firstname of the person to be created
+* last_name  : (string) The lastname of the person to be created
+* company_name : (string) The company for which the person to be create works
+
+Response Type
+PersonMessage
+* id :         (int32 ) The Unique ID of the created person 
+* first_name : (string) The firstname of the created person 
+* last_name  : (string) The lastname of the created person 
+* company_name : (string) The company for which the created person 
+
+#--------------------------------------------------------------------#
+#  person-grpc/Get
+# -------------------------------------------------------------------#
+Request Type
+PersonIdMessage
+* id : (int32 ) The Unique ID of the person to be fetched
+
+Response Type 
+PersonMessage
+* id :         (int32 ) The Unique ID of the person to be fetched
+* first_name : (string) The firstname of the person to be fetched
+* last_name  : (string) The lastname of the person to be fetched
+* company_name : (string) The company for which the person to be fetched works
+
+#--------------------------------------------------------------------#
+#  person-grpc/GetAll
+# -------------------------------------------------------------------#
+Request Type
+EmptyMessage
+
+Response Type
+PersonListMessage
+* persons : (array<PersonMessage>) List of persons fetched 
+
+#--------------------------------------------------------------------#
+#  location-grpc/Get
+# -------------------------------------------------------------------#
+Request Type
+LocationIdMessage
+* id : (int32) The Unique ID of the location to be created
+
+Response Type 
+LocationMessage
+* id : (int32) The Unique ID of the location to be created
+* person_id : (string) The Unique ID of the person on which the location will be created
+* longitude : (string) The longitude of the location 
+* latitude  : (string) The latitude of the location 
+* creation_time: (string) The time on which the location was created
+
+#--------------------------------------------------------------------#
+#  location-grpc/GetLocationPersonConnections
+# -------------------------------------------------------------------#
+Request Type
+LocationRequestMessage
+* person_id : (int32) The Unique ID of the person for which connection locations are fetched
+* start_date : (string) The lower bound to the time period within which connection location are fetched
+* end_date   : (string) The upper bound of the time period ithin which connection location are fetched
+* meters     : (int32) The distance within which within which connection location are fetched
+
+
+Response Type 
+LocationsConnections
+* locations : (array<LocationMessage>) List of connection locations fetched within 
+time period and distance of a given person

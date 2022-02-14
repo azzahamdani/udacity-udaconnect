@@ -1,0 +1,29 @@
+
+#--------------------------------------------------------------------#
+#  Requirements
+# -------------------------------------------------------------------#
+1. A system that handle a large volume of location data - requests overhead 
+2. When you click on person on the web UI , you get the persons that are close to him 
+by location within data -range 
+
+#--------------------------------------------------------------------#
+#  Architecture Decision
+# -------------------------------------------------------------------#
+
+see architecture design image
+
+Since We want to display the same informations and we need to handle a large volume of data, 
+the message passing stategy  that I will rely on are : 
+1) Intergrating a ***message queue*** + ***REST API*** 
+to handle the upcoming massive location data without lost from a mobile device
+2) Integrating ***gRPC*** between the services to ensure performance 
+while decoupling and to keep the data highly validated 
+3) Interfacing ***gRPC services*** with ***REST API*** to ensure 
+integrity of the data received by Web UI
+
+Further more considering the above requirements, dependency graph, domains and strangler pattern 
+for decomposing into microservices, the activities followed this order: 
+Service B was strangeled first : Although it has more dependency than Service A, Service B 
+is less business critical and thus, less risky to refactor
+Service A was strangled second : It has less dependencies than Service C 
+
